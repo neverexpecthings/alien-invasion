@@ -1,0 +1,31 @@
+{
+    "cSpell.ignoreWords": [
+        "gestionar"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none",
+    "cSpell.words": [
+        "abre",
+        "Activa",
+        "circuito",
+        "Clase",
+        "comportamientos",
+        "Crea",
+        "creamos",
+        "escucha",
+        "eventos",
+        "Hace",
+        "Inicia",
+        "Inicializamos",
+        "instacia",
+        "juego",
+        "pantalla",
+        "piezas",
+        "pygame",
+        "reciente",
+        "recursos",
+        "teclado"
+    ]
+}
