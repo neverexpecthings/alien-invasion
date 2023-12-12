@@ -21,6 +21,26 @@ class Settings:
 
         # Configuracion de los aliens
         self.alien_speed = 1.0
-        self.fleet_drop_speed = 100
+        self.fleet_drop_speed = 50
         # fleet_direction de 1 representa derecha; -1 izquierda.
         self.fleet_direction = 1
+
+        # Rapidez del juego
+        self.speedup_scale = 1.1
+
+        self.initialize_dynamic_settings()
+
+    def initialize_dynamic_settings(self):
+        """Inicializamos las configuraciones que cambiara durante el juego."""
+        self.ship_speed = 1.5
+        self.bullet_speed = 2.5
+        self.alien_speed = 1.0
+
+        # fleet_direction en 1 representa derecha, -1 izquierda
+        self.fleet_direction = 1
+
+    def increase_speed(self):
+        """Incrementamos la velocidad."""
+        self.ship_speed *= self.speedup_scale
+        self.bullet_speed *= self.speedup_scale
+        self.alien_speed *= self.speedup_scale
