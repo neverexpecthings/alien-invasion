@@ -1,6 +1,8 @@
 import pygame
 import sys
+from time import sleep
 from settings_c import Settings
+from game_stats_c import GameStats
 from alucard import Alucard
 from fireball import Fireball
 from sword import Sword
@@ -19,6 +21,9 @@ class Castlevania():
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Castlevania")
+
+        # Creamos la instancia para almacenar las estadisticas
+        self.stats = GameStats(self)
 
         self.alucard = Alucard(self)
         self.fireballs = pygame.sprite.Group()
@@ -116,10 +121,29 @@ class Castlevania():
         # Actualizamos la posicion de las balas
         self.swords.update()
 
+        # Chequea colisiones de sword-alucard
+        if pygame.sprite.spritecollideany(self.alucard, self.swords):
+            self._alucard_hit()
+
         # Eliminamos las espadas que ya han desaparecido.
         for sword in self.swords.copy():
             if sword.rect.top >= self.settings.screen_height:
                 self.swords.remove(sword)
+
+    def _alucard_hit(self):
+        """Respuesta a alucard siendo hiteado por una espada."""
+        # Reducimos las vidas
+        self.stats.alucard_left -= 1
+
+        # Eliminamos cualquier espada o scorpion o fireball
+        self.fireballs.empty()
+        self.scorpions.empty()
+        self.swords.empty()
+
+        # Creamos un scorpio, una espada y centramos a alucard
+        self._make_scorpio()
+        self._make_sword()
+        self.alucard.center_alucard()
 
     def _make_scorpio(self):
         """Creamos una espada y la agregamos al grupo."""
@@ -136,10 +160,25 @@ class Castlevania():
         # Actualizamos la posicion de las balas
         self.scorpions.update()
 
+        # Chequea colisiones de scorpion-alucard
+        if pygame.sprite.spritecollideany(self.alucard, self.scorpions):
+            self._alucard_hit()
+
+        # Chequeamos si un scorpion llego a la izquierda
+        self._check_scorpions_left()
+
         # Eliminamos las espadas que ya han desaparecido.
         for scorpio in self.scorpions.copy():
             if scorpio.rect.right < 0:
                 self.scorpions.remove(scorpio)
+
+    def _check_scorpions_left(self):
+        """Chequeamos si un scorpion llega a la izquierda."""
+        for scorpio in self.scorpions.sprites():
+            if scorpio.rect.right <= 0:
+                # Tratamos igual que al ser hiteado
+                self._alucard_hit()
+                break
 
     def _update_screen(self):
         """Rehacemos la pantalla por cada paso del loop."""

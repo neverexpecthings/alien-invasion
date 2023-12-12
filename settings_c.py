@@ -10,6 +10,7 @@ class Settings:
 
         # Configuracion de Alucard
         self.alucard_speed = 5.5
+        self.alucard_limit = 3
 
         # Configuracion de los fireballs
         self.fireball_speed = 7.5

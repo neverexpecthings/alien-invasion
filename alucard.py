@@ -44,6 +44,12 @@ class Alucard():
         self.rect.x = self.x
         self.rect.y = self.y
 
+    def center_alucard(self):
+        "Centra a alucard"
+        self.rect.center = self.screen_rect.center
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
+
     def blitme(self):
         """Dibujamos la imagen en su posicion actual"""
         self.screen.blit(self.image, self.rect)

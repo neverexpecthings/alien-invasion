@@ -10,6 +10,7 @@ class Settings:
 
         # Configuracion de la nave
         self.ship_speed = 2.5
+        self.ship_limit = 3
 
         # Configuracion de las balas
         self.bullet_speed = 3.0
@@ -20,6 +21,6 @@ class Settings:
 
         # Configuracion de los aliens
         self.alien_speed = 1.0
-        self.fleet_drop_speed = 10
+        self.fleet_drop_speed = 100
         # fleet_direction de 1 representa derecha; -1 izquierda.
         self.fleet_direction = 1
