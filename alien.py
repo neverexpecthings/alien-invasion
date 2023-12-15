@@ -12,7 +12,7 @@ class Alien(Sprite):
         self.settings = ai_game.settings
 
         # Cargamos la imagen del alien y configuramos los atributos de su rect.
-        self.image = pygame.image.load('images/alien.bmp')
+        self.image = pygame.image.load("images/alien.bmp")
         self.rect = self.image.get_rect()
 
         # Comenzamos cada nuevo alien cerca de la parte superior izquierda de la

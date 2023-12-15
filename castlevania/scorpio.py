@@ -13,12 +13,11 @@ class Scorpio(Sprite):
         self.settings = c_game.settings
 
         # Cargamos la imagen y configuramos su rect
-        self.image = pygame.image.load('images/scorpio.png')
+        self.image = pygame.image.load("images/Scorpio.png")
         self.rect = self.image.get_rect()
 
         # Comenzamos cada nuevo scorpion en algun random de la parte inferior
-        self.random_number = randint(self.settings.screen_height / 2,
-                                     650)
+        self.random_number = randint(self.settings.screen_height / 2, 650)
         self.rect.y = self.random_number
         self.rect.x = self.settings.screen_width - self.rect.width
 

@@ -7,9 +7,10 @@ from alucard import Alucard
 from fireball import Fireball
 from sword import Sword
 from scorpio import Scorpio
+from button import Button
 
 
-class Castlevania():
+class Castlevania:
     """La clase principal para gestionar las piezas y sus comportamientos."""
 
     def __init__(self):
@@ -19,7 +20,8 @@ class Castlevania():
         self.clock = pygame.time.Clock()
 
         self.screen = pygame.display.set_mode(
-            (self.settings.screen_width, self.settings.screen_height))
+            (self.settings.screen_width, self.settings.screen_height)
+        )
         pygame.display.set_caption("Castlevania")
 
         # Creamos la instancia para almacenar las estadisticas
@@ -30,14 +32,23 @@ class Castlevania():
         self.swords = pygame.sprite.Group()
         self.scorpions = pygame.sprite.Group()
 
+        # Empezamos el juego en un estado inactivo
+        self.game_active = False
+
+        # Button de Play
+        self.play_button = Button(self, "Play")
+
     def run_game(self):
         """Iniciamos el circuito principal."""
         while True:
             self._check_events()
-            self.alucard.update()
-            self._update_fireballs()
-            self._update_swords()
-            self._update_scorpions()
+
+            if self.game_active:
+                self.alucard.update()
+                self._update_fireballs()
+                self._update_swords()
+                self._update_scorpions()
+
             self._update_screen()
             self.clock.tick(75)
 
@@ -50,6 +61,9 @@ class Castlevania():
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
 
     def _check_keydown_events(self, event):
         """Respuesta a las teclas oprimidas"""
@@ -76,6 +90,30 @@ class Castlevania():
             self.alucard.moving_up = False
         elif event.key == pygame.K_s:
             self.alucard.moving_down = False
+
+    def _check_play_button(self, mouse_pos):
+        """Comienza un nuevo juego cuando le dan click al boton de Play."""
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.game_active:
+            self._start_game()
+
+    def _start_game(self):
+        """Comienza una partida nueva."""
+        # Reset the game statistics
+        self.settings.initialize_dynamic_settings()
+        self.stats.reset_stats()
+        self.game_active = True
+
+        # Limpiamos los aliens y balas restantes
+        self.scorpions.empty()
+        self.swords.empty()
+        self.fireballs.empty()
+
+        # Creamos una nueva flota y centramos la nave
+        self.alucard.center_alucard()
+
+        # Escondemos el mouse mientras se juega
+        pygame.mouse.set_visible(False)
 
     def _shoot_fireball(self):
         """Creamos un fireball y lo agregamos al grupo."""
@@ -105,6 +143,7 @@ class Castlevania():
         if not self.scorpions:
             # Quitamos balas y hacemos otra scorpio
             self._make_scorpio()
+            self.settings.increase_speed()
 
     def _make_sword(self):
         """Creamos una espada y la agregamos al grupo."""
@@ -189,11 +228,15 @@ class Castlevania():
         self.swords.draw(self.screen)
         self.scorpions.draw(self.screen)
 
+        # Colocamos el boton de Play si el juego esta inactivo
+        if not self.game_active:
+            self.play_button.draw_button()
+
         # Hacer visible la pantalla mas reciente con flip
         pygame.display.flip()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Creamos las instacia del juego y la abrimos.
     c = Castlevania()
     c.run_game()
