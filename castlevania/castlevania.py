@@ -1,3 +1,4 @@
+from typing import Counter
 import pygame
 import sys
 from time import sleep
@@ -79,6 +80,8 @@ class Castlevania:
             sys.exit()
         elif event.key == pygame.K_e:
             self._shoot_fireball()
+        elif event.key == pygame.K_p:
+            self._start_game()
 
     def _check_keyup_events(self, event):
         """Respuesta a las teclas soltadas"""
@@ -139,11 +142,16 @@ class Castlevania:
         collisions = pygame.sprite.groupcollide(
             self.fireballs, self.scorpions, True, True
         )
+        count_scorpions = 0
 
         if not self.scorpions:
-            # Quitamos balas y hacemos otra scorpio
+            # Quitamos balas y hacemos otra scorpio y incrementamos el counter
             self._make_scorpio()
+            count_scorpions += 1
+
+        if count_scorpions > 3:
             self.settings.increase_speed()
+            count_scorpions = 0
 
     def _make_sword(self):
         """Creamos una espada y la agregamos al grupo."""
@@ -197,6 +205,7 @@ class Castlevania:
         self._make_scorpio()
 
         # Actualizamos la posicion de las balas
+        self._check_scorpions_edges()
         self.scorpions.update()
 
         # Chequea colisiones de scorpion-alucard
@@ -210,6 +219,19 @@ class Castlevania:
         for scorpio in self.scorpions.copy():
             if scorpio.rect.right < 0:
                 self.scorpions.remove(scorpio)
+
+        # TODO: Make every scorpion movement independent
+
+    def _check_scorpions_edges(self):
+        """Respuesta a un scorpion llega al borde"""
+        for scorpion in self.scorpions.sprites():
+            if scorpion.check_edges():
+                self._change_scorpion_direction()
+                break
+
+    def _change_scorpion_direction(self):
+        """Cambia de direccion al scorpio"""
+        self.settings.scorpio_direction *= -1
 
     def _check_scorpions_left(self):
         """Chequeamos si un scorpion llega a la izquierda."""

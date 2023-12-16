@@ -23,10 +23,19 @@ class Scorpio(Sprite):
 
         # Almacenamos la posicion exacta horizontal del scorpion
         self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
+
+    def check_edges(self):
+        """Retorna True si el alien esta en el borde."""
+        return (self.rect.top <= self.settings.screen_height / 2) or (
+            self.rect.bottom >= self.settings.screen_height
+        )
 
     def update(self):
         """Movimiento horizontal de la scorpio."""
         # Actualizamos la posicion del scorpio.
         self.x -= self.settings.scorpio_speed
+        self.y += self.settings.scorpio_speed * self.settings.scorpio_direction
         # Le pasamos el valor al rect
         self.rect.x = self.x
+        self.rect.y = self.y
