@@ -28,6 +28,9 @@ class Settings:
         # Rapidez del juego
         self.speedup_scale = 1.1
 
+        # Rapidez del incremento de puntos.
+        self.score_scale = 1.5
+
         self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):
@@ -39,8 +42,13 @@ class Settings:
         # fleet_direction en 1 representa derecha, -1 izquierda
         self.fleet_direction = 1
 
+        # Configuraciones del scoring.
+        self.alien_points = 50
+
     def increase_speed(self):
-        """Incrementamos la velocidad."""
+        """Incrementamos la velocidad y el valor de los puntos."""
         self.ship_speed *= self.speedup_scale
         self.bullet_speed *= self.speedup_scale
         self.alien_speed *= self.speedup_scale
+
+        self.alien_points = int(self.alien_points * self.score_scale)

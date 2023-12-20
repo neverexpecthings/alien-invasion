@@ -1,17 +1,19 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship:
+class Ship(Sprite):
     """La clase para gestionar la nave."""
 
     def __init__(self, ai_image):
         """Inicializamos la nave y configuramos su posicion inicial."""
+        super().__init__()
         self.screen = ai_image.screen
         self.settings = ai_image.settings
         self.screen_rect = ai_image.screen.get_rect()
 
         # Cargamos la imagen de la nave y conseguimos su rect.
-        self.image = pygame.image.load('images/ship.bmp')
+        self.image = pygame.image.load("images/ship.bmp")
         self.rect = self.image.get_rect()
 
         # Colocamos cada nueva nave en la parte central de abajo de la pantalla.
